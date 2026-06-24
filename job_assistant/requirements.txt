@@ -1,0 +1,21 @@
+# Core agent framework
+deepagents>=0.1.0
+
+# LLM
+langchain-openai>=0.2.0
+langchain-core>=0.3.0
+
+# Web search
+tavily-python>=0.5.0
+
+# UI
+streamlit>=1.38.0
+
+# Data
+pandas>=2.0.0
+
+# File processing
+pypdf>=4.0.0
+python-docx>=1.1.0
+python-dotenv>=1.0.0
+
