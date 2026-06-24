@@ -109,6 +109,25 @@ skills_hint = st.text_area(
 # API Keys configuration (loaded from environment / .env file)
 with st.sidebar:
     st.header("⚙️ Configuration")
+    
+    # Pre-fill from environment
+    env_openai_key = os.environ.get("OPENAI_API_KEY", "").strip()
+    env_tavily_key = os.environ.get("TAVILY_API_KEY", "").strip()
+    
+    openai_key_input = st.text_input(
+        "🔑 OpenAI API Key",
+        value=env_openai_key,
+        type="password",
+        placeholder="sk-proj-..."
+    )
+    
+    tavily_key_input = st.text_input(
+        "🔑 Tavily API Key",
+        value=env_tavily_key,
+        type="password",
+        placeholder="tvly-dev-..."
+    )
+
     openai_model = st.selectbox(
         "OpenAI Model",
         ["gpt-4o-mini", "gpt-4o", "gpt-4-turbo"],
@@ -351,15 +370,15 @@ if run_clicked:
     st.session_state.jobs_df    = None
     st.session_state.cover_doc  = None
 
-    # Load and validate keys from environment variables (.env)
-    openai_key = os.environ.get("OPENAI_API_KEY", "").strip()
-    tavily_key = os.environ.get("TAVILY_API_KEY", "").strip()
+    # Load and validate keys (sidebar input takes precedence)
+    openai_key = openai_key_input.strip() if openai_key_input.strip() else os.environ.get("OPENAI_API_KEY", "").strip()
+    tavily_key = tavily_key_input.strip() if tavily_key_input.strip() else os.environ.get("TAVILY_API_KEY", "").strip()
 
     if not openai_key:
-        st.error("❌ OpenAI API key is missing. Please set OPENAI_API_KEY in the `.env` file in the project directory.")
+        st.error("❌ OpenAI API key is missing. Please enter it in the sidebar or set it in the `.env` file.")
         st.stop()
     if not tavily_key:
-        st.error("❌ Tavily API key is missing. Please set TAVILY_API_KEY in the `.env` file in the project directory.")
+        st.error("❌ Tavily API key is missing. Please enter it in the sidebar or set it in the `.env` file.")
         st.stop()
 
     # Inject tavily key into the mutable runtime dict — no module re-import needed
